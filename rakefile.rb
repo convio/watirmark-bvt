@@ -47,5 +47,6 @@ end
 
 desc "deploy the gem to the gem server; must be run on on qalin"
 task :deploy => :gem do
+  sh "bundle install"
   sh "#{gem} install --local -i c:\\gem_server --no-ri pkg\\#{package.gem_file} --ignore-dependencies"
 end
