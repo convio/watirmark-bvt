@@ -1,10 +1,11 @@
 $LOAD_PATH.unshift File.dirname(__FILE__)
+sh "bundle install"
+require 'bundler/setup'
 require 'rubygems'
 require 'rake/rdoctask'
 require 'rspec/core/rake_task'
 require 'rake/gempackagetask'
 require 'lib/watirmark_bvt/version'
-require 'bundler/setup'
 
 task :default => [:gem]
 
@@ -47,6 +48,5 @@ end
 
 desc "deploy the gem to the gem server; must be run on on qalin"
 task :deploy => :gem do
-  sh "bundle install"
   sh "#{gem} install --local -i c:\\gem_server --no-ri pkg\\#{package.gem_file} --ignore-dependencies"
 end
