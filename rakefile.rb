@@ -4,6 +4,7 @@ require 'rake/rdoctask'
 require 'rspec/core/rake_task'
 require 'rake/gempackagetask'
 require 'lib/watirmark_bvt/version'
+require 'bundler/setup'
 
 task :default => [:gem]
 
