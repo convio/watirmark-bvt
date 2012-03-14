@@ -1,52 +1,28 @@
-$LOAD_PATH.unshift File.dirname(__FILE__)
-sh "bundle install"
-require 'bundler/setup'
 require 'rubygems'
-require 'rake/rdoctask'
+require 'bundler'
+Bundler::GemHelper.install_tasks
+
+require 'rake/clean'
+CLEAN << FileList["pkg", "coverage"]
+
 require 'rspec/core/rake_task'
-require 'rake/gempackagetask'
-require 'lib/watirmark_bvt/version'
+RSpec::Core::RakeTask.new(:spec)
 
-task :default => [:gem]
-
-# Specification for gem creation
-spec = Gem::Specification.new do |s|
-    s.name               = WatirmarkBVT::VERSION::NAME
-    s.version            = WatirmarkBVT::VERSION::STRING
-    s.files              = FileList['lib/**/*'].to_a
-    s.author             = 'Hugh McGowan'
-    s.email              = 'hmcgowan@convio.com' 
-    s.has_rdoc           = true
-    s.homepage           = 'http://twiki.convio.com/twiki/bin/view/Engineering/WatirmarkDB'
-    s.rubyforge_project  = 'none'
-    s.summary            = WatirmarkBVT::VERSION::SUMMARY
-    s.description        = "The watirmark_bvt library provides access to BVT configurations"
-    WatirmarkBVT::DEPENDENCIES.each do |gem|
-      s.add_dependency gem[0], gem[1]
-    end
+RSpec::Core::RakeTask.new(:rcov) do |t|
+  t.rcov = true
 end
 
-Rake::RDocTask.new(:rdoc) do |rd|
-  rd.rdoc_files.include("lib/**/*.rb")
-  rd.options << "--all"
-end
- 
-RSpec::Core::RakeTask.new do |t|
-  t.rcov = false
-  t.pattern = 'spec/**/*_spec.rb'
-  t.rspec_opts ||= []
-  t.rspec_opts << '-fs'
+task :default => :spec
+
+require 'rdoc/task'
+Rake::RDocTask.new do |rdoc|
+  rdoc.rdoc_dir = 'rdoc'
+  rdoc.title = "WatirmarkBVT #{WatirmarkBVT::VERSION::STRING}"
+  rdoc.rdoc_files.include('README*')
+  rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
-package = Rake::GemPackageTask.new(spec) {}
-gem = "ruby #{Config::CONFIG['bindir']}\\gem"
-
-desc 'Create the gem'
-task :install => :gem do
-  sh "#{gem} install --both --no-rdoc --no-ri pkg\\#{package.gem_file}"
-end
-
-desc "deploy the gem to the gem server; must be run on on qalin"
-task :deploy => :gem do
-  sh "#{gem} install --local -i c:\\gem_server --no-ri pkg\\#{package.gem_file} --ignore-dependencies"
+desc "deploy the gem to the gem server; must be run on on gem server"
+task :deploy => [:clean, :install] do
+  sh "gem install --local --no-ri ./pkg/* --ignore-dependencies"
 end
