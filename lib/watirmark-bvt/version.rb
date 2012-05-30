@@ -1,7 +1,7 @@
 module Watirmark
   module BVT
     module VERSION
-      NAME = 'watirmark_bvt'
+      NAME = 'watirmark-bvt'
       STRING = '1.1'
       CODENAME = ''
       SUMMARY = "#{NAME}-#{STRING} (#{CODENAME})"
