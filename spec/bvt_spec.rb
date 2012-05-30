@@ -1,9 +1,9 @@
 require 'spec_helper'
-require 'watirmark_bvt/site'
+require 'watirmark-bvt/site'
 
 describe "Getting the site info from BVT" do
   before :all do
-    @site = WatirmarkBVT::Site.new('qa309.bvt3.corp.convio.com')
+    @site = Watirmark::BVT::Site.new('qa309.bvt3.corp.convio.com')
   end
 
   specify "should be able to see the site_id" do
@@ -20,12 +20,12 @@ describe "Getting the site info from BVT" do
 
   specify "should raise an error for an unknown site" do
     lambda {
-      WatirmarkBVT::Site.new('unknown.bvt3.corp.convio.com')
-    }.should raise_error(WatirmarkBVT::RestClientError)
+      Watirmark::BVT::Site.new('unknown.bvt3.corp.convio.com')
+    }.should raise_error(Watirmark::BVT::RestClientError)
   end
 
   specify 'should be able to reset the hostname' do
-    WatirmarkBVT.hostname = 'test.corp.convio.com'
-    WatirmarkBVT.hostname.should == 'test.corp.convio.com'
+    Watirmark::BVT.hostname = 'test.corp.convio.com'
+    Watirmark::BVT.hostname.should == 'test.corp.convio.com'
   end
 end

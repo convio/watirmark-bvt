@@ -1,0 +1,5 @@
+require 'json'
+require 'rest-client'
+require 'watirmark-bvt/exceptions'
+require 'watirmark-bvt/rest_client_helpers'
+require 'watirmark-bvt/site'
